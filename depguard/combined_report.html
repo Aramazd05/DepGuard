@@ -1,0 +1,114 @@
+
+<html>
+<head><title>Combined Dependency Scan Report</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  h1 { color: #333; }
+  .summary, .package { margin-bottom: 30px; }
+  .vuln { border-bottom: 1px solid #ccc; padding: 10px 0; }
+  .metrics ul { margin: 0; padding-left: 20px; }
+</style>
+</head>
+<body>
+  <h1>Combined Dependency Scan Report</h1>
+  <div class="summary">
+    <h2>Summary</h2>
+    <ul>
+      <li>Total vulnerabilities: 2</li>
+      <li>Affected packages: 1 of 2</li>
+      
+        <li>MEDIUM: 2</li>
+      
+    </ul>
+  </div>
+
+  
+    <div class="package">
+      <h2>requests==2.31.0 (Risk Score: 5.6)</h2>
+      
+        
+          <div class="vuln">
+            <h3>GHSA-9hjg-9r4m-mvj7 &mdash; Score: 5.3 (MEDIUM)</h3>
+            <div class="metrics">
+              <strong>CVSS v3 Metrics:</strong>
+              <ul>
+              
+                <li>AV: N</li>
+              
+                <li>AC: H</li>
+              
+                <li>PR: N</li>
+              
+                <li>UI: R</li>
+              
+                <li>S: U</li>
+              
+                <li>C: H</li>
+              
+                <li>I: N</li>
+              
+                <li>A: N</li>
+              
+              </ul>
+            </div>
+            <p>### Impact
+
+Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs.
+
+### Workarounds
+For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on your Requests Session ([docs](https://requests.readthedocs.io/en/latest/api/#requests.Session.trust_env)).
+
+### References
+https://github.com/psf/requests/pull/6965
+https://seclists.org/fulldisclosure/2025/Jun/2</p>
+          </div>
+        
+          <div class="vuln">
+            <h3>GHSA-9wx4-h78v-vm56 &mdash; Score: 5.6 (MEDIUM)</h3>
+            <div class="metrics">
+              <strong>CVSS v3 Metrics:</strong>
+              <ul>
+              
+                <li>AV: L</li>
+              
+                <li>AC: H</li>
+              
+                <li>PR: H</li>
+              
+                <li>UI: R</li>
+              
+                <li>S: U</li>
+              
+                <li>C: H</li>
+              
+                <li>I: H</li>
+              
+                <li>A: N</li>
+              
+              </ul>
+            </div>
+            <p>When making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same origin will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool.
+
+### Remediation
+Any of these options can be used to remediate the current issue, we highly recommend upgrading as the preferred mitigation.
+
+* Upgrade to `requests>=2.32.0`.
+* For `requests<2.32.0`, avoid setting `verify=False` for the first request to a host while using a Requests Session.
+* For `requests<2.32.0`, call `close()` on `Session` objects to clear existing connections if `verify=False` is used.
+
+### Related Links
+* https://github.com/psf/requests/pull/6655</p>
+          </div>
+        
+      
+    </div>
+  
+    <div class="package">
+      <h2>flask==2.3.3 (Risk Score: 0)</h2>
+      
+        <p>No vulnerabilities found.</p>
+      
+    </div>
+  
+</body>
+</html>

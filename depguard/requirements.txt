@@ -1,0 +1,4 @@
+requests
+cyclonedx-python-lib
+jinja2
+cvss
