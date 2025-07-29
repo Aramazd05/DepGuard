@@ -45,9 +45,11 @@ A lightweight dependency-vulnerability scanner and reporting tool for your proje
 
 
 Line 1: Minimum CVSS score to report (e.g. 4.0)
+
 4.0
 
 Line 2: Discord webhook URL, or "none" to disable alerts
+
 https://discord.com/api/webhooks/…
 
 CVSS threshold: only vulnerabilities ≥ this score will be included.
@@ -62,7 +64,7 @@ cd /path/to/your-project
 python ../depguard/main.py
 
 
-What happens:
+## What happens:
 
 Parse your manifest (requirements.txt / package-lock.json / pom.xml).
 
