@@ -19,8 +19,7 @@ A lightweight dependency-vulnerability scanner and reporting tool for your proje
 3. [Configuration](#configuration)  
 4. [Usage](#usage)  
 5. [Directory Layout](#directory-layout)  
-6. [Contributing](#contributing)  
-7. [License](#license)  
+ 
 
 ## Prerequisites
 
@@ -36,16 +35,19 @@ A lightweight dependency-vulnerability scanner and reporting tool for your proje
    
   
 2. Install DepGuard’s Python dependencies:
-   ```
+   ```bash
+
    pip install -r requirements.txt
+   
    ```
 
 3. Edit depguard/reports/config.txt to adjust:
 
-# Line 1: Minimum CVSS score to report (e.g. 4.0)
+
+Line 1: Minimum CVSS score to report (e.g. 4.0)
 4.0
 
-# Line 2: Discord webhook URL, or "none" to disable alerts
+Line 2: Discord webhook URL, or "none" to disable alerts
 https://discord.com/api/webhooks/…
 
 CVSS threshold: only vulnerabilities ≥ this score will be included.
@@ -78,7 +80,7 @@ Send Discord alerts for any high-severity findings (if enabled).
 
 
 ## Directory Layout
-
+```bash
 depguard/
 ├── main.py
 ├── scanner/
@@ -99,3 +101,4 @@ depguard/
     ├── HtmlHistory/
     │   └── combined_report_<old-timestamp>.html
     └── combined_report_<new-timestamp>.html
+```
