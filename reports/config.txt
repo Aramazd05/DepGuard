@@ -1,0 +1,5 @@
+# Notify on CVSS ≥ this value
+4.0
+
+# Your Discord webhook URL; set to "none" to disable notifications
+none

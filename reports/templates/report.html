@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dependency Vulnerability Report</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .badge { display: inline-block; padding: 0.2em 0.6em; border-radius: 0.25em; color: white; font-size: 0.9em; margin: 0 0.2em 0.2em 0; }
+    .badge-low { background-color: #28a745; }
+    .badge-medium { background-color: #ffc107; color: #212529; }
+    .badge-high { background-color: #fd7e14; }
+    .badge-critical { background-color: #dc3545; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+    th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+    th { background-color: #f8f9fa; }
+    .risk-row-high { background-color: #fff3cd; }
+    .risk-row-critical { background-color: #f8d7da; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <h1>Dependency Vulnerability Report</h1>
+
+  <!-- Summary Dashboard -->
+  <section id="summary">
+    <h2>Summary</h2>
+    <p><strong>Total Vulnerabilities:</strong> {{ total_issues }}</p>
+    <p><strong>Affected Packages:</strong> {{ affected_packages }}</p>
+    <canvas id="severityChart" width="400" height="200"></canvas>
+  </section>
+
+  <!-- Inject the counts array as a JSON string, then parse it -->
+  <script>
+    // Valid JS: a string literal containing the JSON-serialized counts
+    const countsJson = '{{ [counts.low, counts.medium, counts.high, counts.critical] | tojson }}';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const severityCounts = JSON.parse(countsJson);
+      const ctx = document.getElementById('severityChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Low', 'Medium', 'High', 'Critical'],
+          datasets: [{
+            label: 'Vulnerabilities',
+            data: severityCounts
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+  <!-- Detailed Table -->
+  <section id="details">
+    <h2>Packages &amp; Vulnerabilities</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>Version</th>
+          <th>Risk Score</th>
+          <th>Vulnerabilities</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pkg in results %}
+          {% set cls = '' %}
+          {% if pkg.risk_score >= 9.0 %}
+            {% set cls = 'risk-row-critical' %}
+          {% elif pkg.risk_score >= 7.0 %}
+            {% set cls = 'risk-row-high' %}
+          {% endif %}
+          <tr{% if cls %} class="{{ cls }}"{% endif %}>
+            <td>{{ pkg.name }}</td>
+            <td>{{ pkg.version }}</td>
+            <td>{{ pkg.risk_score | round(1) }}</td>
+            <td>
+              {% if pkg.vulns %}
+                {% for v in pkg.vulns %}
+                  {% set sev = 'critical' if v.score >= 9.0
+                               else 'high' if v.score >= 7.0
+                               else 'medium' if v.score >= 4.0
+                               else 'low' %}
+                  <span class="badge badge-{{ sev }}">
+                    {{ v.id }} ({{ v.score | round(1) }})
+                  </span>
+                {% endfor %}
+              {% else %}
+                <span>No known vulnerabilities</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <footer style="margin-top:2rem; font-size:0.8rem; color:#666;">
+    Report generated on {{ now.strftime('%Y-%m-%d %H:%M:%S') }}
+  </footer>
+</body>
+</html>
